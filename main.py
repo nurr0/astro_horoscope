@@ -29,7 +29,7 @@ ip_requests = {}
 time_interval = timedelta(seconds=10)
 
 # Максимальное количество запросов за время time_interval
-max_requests = 5
+max_requests = 10
 
 @app.middleware("http")
 async def rate_limit(request, call_next):
