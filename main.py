@@ -6,6 +6,7 @@ from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.responses import JSONResponse
 from datetime import datetime, timedelta
 
+from settings import *
 middleware = [
     Middleware(
         CORSMiddleware,
@@ -26,10 +27,12 @@ app = FastAPI(middleware=middleware)
 ip_requests = {}
 
 # Время, в течение которого можно делать определенное количество запросов
-time_interval = timedelta(seconds=10)
+time_interval = timedelta(seconds=TIME_INTERVAL_FOR_MAX_REQUESTS)
 
 # Максимальное количество запросов за время time_interval
-max_requests = 10
+
+max_requests = MAX_REQUESTS
+
 
 @app.middleware("http")
 async def rate_limit(request, call_next):
@@ -64,4 +67,10 @@ async def horoscope_full(sign: str):
 @app.get("/horoscope/{sign}/")
 async def horoscope(sign: str):
     response = get_horoscope(sign=sign)
+    return response
+
+
+@app.get("/name/{name}/")
+async def name_meaning(name: str):
+    response = get_name_meaning(name)
     return response
