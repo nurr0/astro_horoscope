@@ -12,10 +12,15 @@ def get_full_horoscope(sign):
 
 
 def get_name_meaning(name):
-    with open('name_dict.json', 'r', encoding='cp1251') as f:
-        data = json.load(f)
-        try:
+    try:
+        with open('name_dict1.json', 'r', encoding='cp1251') as f:
+            data = json.load(f)
             name_info = data[name]
+    except:
+        try:
+            with open('name_dict2.json', 'r', encoding='cp1251') as f:
+                data = json.load(f)
+                name_info = data[name]
         except:
             name_info = JSONResponse(content={"detail": "Not found"}, status_code=404)
     return name_info
