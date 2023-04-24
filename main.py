@@ -7,6 +7,7 @@ from fastapi.responses import JSONResponse
 from datetime import datetime, timedelta
 
 from settings import *
+
 middleware = [
     Middleware(
         CORSMiddleware,
@@ -58,6 +59,7 @@ async def rate_limit(request, call_next):
     response = await call_next(request)
     return response
 
+
 @app.get("/horoscope/{sign}/full/")
 async def horoscope_full(sign: str):
     response = get_full_horoscope(sign=sign)
@@ -73,4 +75,10 @@ async def horoscope(sign: str):
 @app.get("/name/{name}/")
 async def name_meaning(name: str):
     response = get_name_meaning(name)
+    return response
+
+
+@app.get("/name_numerology/")
+async def name_meaning(familyname: str, name: str,  fathername: str):
+    response = name_analys(name, familyname, fathername)
     return response
