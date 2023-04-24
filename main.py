@@ -79,6 +79,6 @@ async def name_meaning(name: str):
 
 
 @app.get("/name_numerology/")
-async def name_meaning(familyname: str, name: str,  fathername: str):
+async def name_numerology(familyname: str, name: str,  fathername: str):
     response = name_analys(name, familyname, fathername)
     return response
