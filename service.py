@@ -97,9 +97,9 @@ def get_omens_by_letter(letter):
 
 
 def get_omens_by_word(word):
-    # try:
-    response = requests.get(f'https://horoscopes.rambler.ru/api/front/v3/omens/word/{word}/').json()
-    data = response['content']['inner_blocks'][0]['omens_list']['omens']
-    # except:
-    #     data = JSONResponse(content={"detail": "Not found"}, status_code=404)
+    try:
+        response = requests.get(f'https://horoscopes.rambler.ru/api/front/v3/omens/word/{word}/').json()
+        data = response['content']['inner_blocks'][0]['omens_list']['omens']
+    except:
+        data = JSONResponse(content={"detail": "Not found"}, status_code=404)
     return data
