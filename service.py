@@ -1,10 +1,13 @@
 import requests
 import json
 from fastapi.responses import JSONResponse
+
+
 def get_horoscope(sign):
     response = requests.get(f'http://horoscopes.rambler.ru/api/front/v3/horoscope/love/{sign}/today/').text
     result = {'data': json.loads(response)['content']['text'][0]['content']}
     return result
+
 
 def get_full_horoscope(sign):
     response = requests.get(f'http://horoscopes.rambler.ru/api/front/v3/horoscope/love/{sign}/today/').json()
@@ -17,27 +20,29 @@ def get_name_meaning(name):
             data = json.load(f)
             name_info = data[name]
     except:
-            name_info = JSONResponse(content={"detail": "Not found"}, status_code=404)
+        name_info = JSONResponse(content={"detail": "Not found"}, status_code=404)
     return name_info
 
 
-
 letter_values = {
-        "А": 1, "И": 1, "С": 1, "Ъ": 1,
-        "Б": 2, "Й": 2, "Т": 2, "Ы": 2,
-        "В": 3, "К": 3, "У": 3, "Ь": 3,
-        "Г": 4, "Л": 4, "Ф": 4, "Э": 4,
-        "Д": 5, "М": 5, "Х": 5, "Ю": 5,
-        "Е": 6, "Н": 6, "Ц": 6, "Я": 6,
-        "Ё": 7, "О": 7, "Ч": 7,
-        "Ж": 8, "П": 8, "Ш": 8,
-        "З": 9, "Р": 9, "Щ": 9
-    }
+    "А": 1, "И": 1, "С": 1, "Ъ": 1,
+    "Б": 2, "Й": 2, "Т": 2, "Ы": 2,
+    "В": 3, "К": 3, "У": 3, "Ь": 3,
+    "Г": 4, "Л": 4, "Ф": 4, "Э": 4,
+    "Д": 5, "М": 5, "Х": 5, "Ю": 5,
+    "Е": 6, "Н": 6, "Ц": 6, "Я": 6,
+    "Ё": 7, "О": 7, "Ч": 7,
+    "Ж": 8, "П": 8, "Ш": 8,
+    "З": 9, "Р": 9, "Щ": 9
+}
+
 
 def name_to_num(name, familyname, fathername):
     num_name = ''.join([str(letter_values[i]) for i in name.strip().upper().replace(' ', '').replace('-', '')])
-    num_familyname = ''.join([str(letter_values[i]) for i in familyname.strip().upper().replace(' ', '').replace('-', '')])
-    num_fathername = ''.join([str(letter_values[i]) for i in fathername.strip().upper().replace(' ', '').replace('-', '')])
+    num_familyname = ''.join(
+        [str(letter_values[i]) for i in familyname.strip().upper().replace(' ', '').replace('-', '')])
+    num_fathername = ''.join(
+        [str(letter_values[i]) for i in fathername.strip().upper().replace(' ', '').replace('-', '')])
     num_fullname = num_name + num_fathername + num_familyname
     num_name = int(num_fullname)
     while num_name >= 10:
@@ -46,6 +51,7 @@ def name_to_num(name, familyname, fathername):
         if num_name == 11 or num_name == 22:
             return num_name
     return num_name
+
 
 def name_analys(name, familyname, fathername):
     num_explanation = {
@@ -67,7 +73,7 @@ def name_analys(name, familyname, fathername):
         data = {'familyname': familyname,
                 'name': name,
                 'fathername': fathername,
-                'name_number':num_name,
+                'name_number': num_name,
                 'explanation': explanation
                 }
     except:
@@ -76,11 +82,24 @@ def name_analys(name, familyname, fathername):
 
 
 def get_omens_by_letter(letter):
-    response = requests.get(f'https://horoscopes.rambler.ru/api/front/v3/omens/letter/{letter}/').json()
-    data = response['content']['inner_blocks']['list_bubbles']['tabs']['list']
-    res_data = []
-    for elem in data:
-        res_data.append({'name': elem['name'],
-                         'link': elem['link'].replace('/primety/word/', 'https://atoma-horoscope.onrender.com/omens/word/'),
-                         'sign': elem['sign']})
+    try:
+        response = requests.get(f'https://horoscopes.rambler.ru/api/front/v3/omens/letter/{letter}/').json()
+        data = response['content']['inner_blocks'][0]['list_bubbles']['tabs'][0]['list']
+        res_data = []
+        for elem in data:
+            res_data.append({'name': elem['name'],
+                             'link': elem['link'].replace('/primety/word/',
+                                                          'https://atoma-horoscope.onrender.com/omens/word/'),
+                             'sign': elem['sign']})
+    except:
+        res_data = JSONResponse(content={"detail": "Not found"}, status_code=404)
     return res_data
+
+
+def get_omens_by_word(word):
+    try:
+        response = requests.get(f'https://horoscopes.rambler.ru/api/front/v3/omens/word/{word}/').json()
+        data = response['content']['inner_blocks'][0]['omens_list']['omens']
+    except:
+        data = JSONResponse(content={"detail": "Not found"}, status_code=404)
+    return data

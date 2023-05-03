@@ -88,3 +88,9 @@ async def name_numerology(familyname: str, name: str, fathername: str):
 async def omens_by_letter(letter: str):
     response = get_omens_by_letter(letter)
     return response
+
+
+@app.get("/omens_by_word/{word}/")
+async def omens_by_word(word: str):
+    response = get_omens_by_word(word)
+    return response
