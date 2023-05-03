@@ -89,7 +89,7 @@ def get_omens_by_letter(letter):
         for elem in data:
             res_data.append({'name': elem['name'],
                              'link': elem['link'].replace('/primety/word/',
-                                                          'https://atoma-horoscope.onrender.com/omens/word/'),
+                                                          'https://atoma-horoscope.onrender.com/omens_by_word/'),
                              'sign': elem['sign']})
     except:
         res_data = JSONResponse(content={"detail": "Not found"}, status_code=404)
