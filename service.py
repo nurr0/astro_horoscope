@@ -74,3 +74,13 @@ def name_analys(name, familyname, fathername):
         data = JSONResponse(content={"detail": "Not found"}, status_code=404)
     return data
 
+
+def get_omens_by_letter(letter):
+    response = requests.get(f'https://horoscopes.rambler.ru/api/front/v3/omens/letter/{letter}/').json()
+    data = response['content']['inner_blocks']['list_bubbles']['tabs']['list']
+    res_data = []
+    for elem in data:
+        res_data.append({'name': elem['name'],
+                         'link': elem['link'].replace('/primety/word/', 'https://atoma-horoscope.onrender.com/omens/word/'),
+                         'sign': elem['sign']})
+    return res_data
