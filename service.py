@@ -103,3 +103,9 @@ def get_omens_by_word(word):
     except:
         data = JSONResponse(content={"detail": "Not found"}, status_code=404)
     return data
+
+
+def get_financial_horoscope(sign, period):
+    response = requests.get(f'https://horoscopes.rambler.ru/api/front/v3/horoscope/finance/{sign}/{period}/').text
+    result = {'data': json.loads(response)['content']['text']}
+    return result

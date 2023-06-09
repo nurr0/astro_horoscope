@@ -94,3 +94,9 @@ async def omens_by_letter(letter: str):
 async def omens_by_word(word: str):
     response = get_omens_by_word(word)
     return response
+
+
+@app.get("/finance_horoscope/{sign}/{period}/")
+async def finance_horoscope(sign: str, period: str):
+    response = get_financial_horoscope(sign=sign, period=period)
+    return response
